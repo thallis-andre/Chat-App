@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import * as firebase from 'firebase/app';
 
@@ -10,7 +10,7 @@ import { ChatMessage } from '../models/chat-message.model';
 @Injectable()
 export class ChatService {
   user: firebase.User;
-  chatMessages: FirebaseListObservable<ChatMessage[]>;
+  chatMessages: AngularFireList<ChatMessage>;
   chatMessage: ChatMessage;
   userName: Observable<string>;
 
@@ -56,7 +56,8 @@ export class ChatService {
     console.log('Enviando mensagem')
   }
 
-  getMessages(): Observable<ChatMessage[]> {
+  getMessages(): AngularFireList<ChatMessage> {
+    console.log('Buscando mensagem')
     return this.db.list('/messages', ref => {
       return ref.limitToLast(25).orderByKey()
     });
